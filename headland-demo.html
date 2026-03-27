@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Headland Intelligence — Demo by Pineapple Bun AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"/>
+<style>
+:root {
+  --bg: #F8F6F1; --bg2: #F2EFE8; --card: #FFFFFF;
+  --border: #E8E4DA; --border2: #D4CEC0;
+  --gold: #C9A84C; --gold2: #E8C96A; --gold-fade: #C9A84C14;
+  --navy: #1A2B4A; --navy2: #253B63;
+  --slate: #4A5568; --muted: #8B95A1;
+  --green: #2D7D4F; --charcoal: #1C1A16;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--charcoal);font-family:'DM Sans',sans-serif;overflow-x:hidden}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--gold-fade);border-radius:2px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes chat{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+button,input,textarea,select{font-family:'DM Sans',sans-serif}
+input:focus,textarea:focus,select:focus{outline:none}
+section{scroll-margin-top:72px}
+
+/* DEMO BANNER */
+.demo-banner{background:var(--gold);padding:7px 0;text-align:center;font-size:10.5px;font-family:'DM Mono',monospace;color:var(--navy);letter-spacing:.8px;position:relative;z-index:200}
+
+/* NAV */
+.nav{position:fixed;top:33px;left:0;right:0;z-index:100;height:68px;display:flex;align-items:center;padding:0 6%;transition:all .3s;background:transparent}
+.nav.scrolled{background:rgba(248,246,241,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
+.nav-logo-box{width:32px;height:32px;background:var(--navy);border-radius:4px;display:flex;align-items:center;justify-content:center}
+.nav-logo-inner{width:14px;height:14px;border:1.5px solid var(--gold);border-radius:2px}
+.nav-logo-text{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;color:var(--navy);line-height:1}
+.nav-logo-sub{font-size:8px;font-family:'DM Mono',monospace;color:var(--gold);letter-spacing:2px}
+.nav-links{display:flex;gap:4px;margin:0 auto}
+.nav-link{padding:6px 14px;border-radius:6px;border:none;background:transparent;color:var(--slate);font-size:13px;cursor:pointer;transition:color .2s;text-decoration:none}
+.nav-link:hover{color:var(--navy)}
+.nav-actions{display:flex;gap:10px;align-items:center}
+.btn-dash{padding:7px 14px;border-radius:7px;font-size:12px;font-family:'DM Mono',monospace;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:6px}
+.btn-enquire{padding:8px 20px;border-radius:7px;border:none;cursor:pointer;background:var(--navy);color:#fff;font-size:13px;font-weight:500;transition:all .2s}
+.btn-enquire:hover{background:var(--navy2)}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;padding:100px 6% 80px;position:relative;overflow:hidden;background:linear-gradient(160deg,#1A2B4A 0%,#0F1E36 100%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:60px 60px}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 70% 40%,rgba(201,168,76,.07) 0%,transparent 70%)}
+.hero-ring{position:absolute;border-radius:50%}
+.hero-content{position:relative;z-index:1;max-width:760px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;margin-bottom:32px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:4px;padding:6px 16px;animation:fadeUp .6s ease both}
+.hero-badge-dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.hero-badge-text{font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);letter-spacing:2px}
+.hero-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(42px,5.5vw,72px);font-weight:500;line-height:1.1;color:#F0EDE6;margin-bottom:24px;letter-spacing:-.5px;animation:fadeUp .7s .1s ease both}
+.hero-em{color:var(--gold);font-style:italic}
+.hero-p{font-size:16px;color:#B8B4A8;line-height:1.85;max-width:520px;font-weight:300;margin-bottom:40px;animation:fadeUp .7s .2s ease both}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:60px;animation:fadeUp .7s .3s ease both}
+.btn-primary{padding:13px 30px;border-radius:6px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);font-size:14px;font-weight:600;box-shadow:0 6px 24px rgba(201,168,76,.33);transition:all .2s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(201,168,76,.44)}
+.btn-outline-light{padding:13px 30px;border-radius:6px;cursor:pointer;border:1px solid rgba(255,255,255,.2);background:transparent;color:#F0EDE6;font-size:14px;font-weight:400;transition:all .2s}
+.btn-outline-light:hover{border-color:rgba(255,255,255,.4)}
+.hero-stats{display:flex;gap:40px;flex-wrap:wrap;animation:fadeUp .7s .4s ease both}
+.hero-stat-val{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:600;color:var(--gold)}
+.hero-stat-label{font-size:11px;color:#8B95A1;margin-top:2px}
+
+/* SECTION COMMONS */
+.section-tag{font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);letter-spacing:2px;margin-bottom:14px}
+.section-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,46px);font-weight:500;color:var(--navy);line-height:1.2}
+
+/* COMPANY */
+.company{padding:100px 6%;background:var(--bg)}
+.company-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.company-p{font-size:14px;color:var(--slate);line-height:1.9;margin-bottom:16px}
+.company-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.company-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;transition:all .2s;cursor:default}
+.company-card:hover{border-color:rgba(201,168,76,.4);box-shadow:0 6px 20px rgba(201,168,76,.1);transform:translateY(-2px)}
+.company-card-icon{font-size:22px;margin-bottom:10px}
+.company-card-title{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:6px}
+.company-card-body{font-size:12px;color:var(--slate);line-height:1.6}
+
+/* SERVICES */
+.services{padding:100px 6%;background:var(--bg2)}
+.services-inner{max-width:1100px;margin:0 auto}
+.services-grid{display:grid;grid-template-columns:280px 1fr;gap:20px;margin-top:52px}
+.service-nav-btn{width:100%;padding:13px 16px;border-radius:8px;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--slate);margin-bottom:6px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:400;transition:all .15s;text-align:left}
+.service-nav-btn.active{border-color:rgba(201,168,76,.5);background:rgba(201,168,76,.08);color:var(--navy);font-weight:500}
+.service-nav-arrow{margin-left:auto;color:var(--gold);font-size:16px}
+.service-detail{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:36px;position:relative;overflow:hidden;animation:fadeIn .3s ease}
+.service-detail-top{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent)}
+.service-icon{font-size:36px;margin-bottom:18px}
+.service-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--navy);margin-bottom:16px}
+.service-body{font-size:14.5px;color:var(--slate);line-height:1.85}
+.btn-service-cta{margin-top:28px;padding:11px 24px;border-radius:6px;border:none;background:var(--navy);color:#fff;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;display:inline-block}
+.btn-service-cta:hover{background:var(--navy2);transform:translateY(-1px)}
+
+/* TESTIMONIALS */
+.testimonials{padding:100px 6%;background:var(--bg)}
+.testimonials-inner{max-width:1100px;margin:0 auto}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:44px}
+.testi-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;transition:all .2s}
+.testi-card:hover{border-color:rgba(201,168,76,.4);transform:translateY(-3px);box-shadow:0 10px 28px rgba(201,168,76,.1)}
+.testi-stars{font-size:16px;color:var(--gold);margin-bottom:14px}
+.testi-quote{font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--charcoal);line-height:1.7;font-style:italic;margin-bottom:18px}
+.testi-name{font-size:12px;font-weight:600;color:var(--navy)}
+.testi-role{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* CONTACT */
+.contact{padding:100px 6%;background:var(--navy)}
+.contact-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:flex-start}
+.contact-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,3.5vw,46px);font-weight:500;color:#F0EDE6;line-height:1.2;margin-bottom:20px}
+.contact-em{color:var(--gold);font-style:italic}
+.contact-p{font-size:14px;color:#B8B4A8;line-height:1.85;margin-bottom:32px}
+.contact-info-row{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.contact-info-text{font-size:13px;color:#8B95A1}
+.contact-form{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:32px}
+.form-label{display:block;font-size:11.5px;color:var(--slate);margin-bottom:5px}
+.form-input{width:100%;background:#fff;border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--charcoal);transition:border-color .15s;margin-bottom:14px}
+.form-input:focus{border-color:var(--gold)}
+.form-select{width:100%;background:#fff;border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--charcoal);cursor:pointer;margin-bottom:14px}
+.form-textarea{width:100%;background:#fff;border:1px solid var(--border);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--charcoal);resize:vertical;line-height:1.6;margin-bottom:20px}
+.btn-submit{width:100%;padding:13px;border-radius:7px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);font-size:13.5px;font-weight:600;box-shadow:0 4px 16px rgba(201,168,76,.33);transition:all .2s}
+.btn-submit:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(201,168,76,.44)}
+.form-note{font-size:11px;color:var(--muted);text-align:center;margin-top:12px}
+.form-thanks{text-align:center;padding:40px 20px;display:none}
+.form-thanks.show{display:block;animation:fadeUp .4s ease}
+
+/* FOOTER */
+footer{background:#0F1E36;padding:36px 6%;border-top:1px solid rgba(255,255,255,.07)}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;color:#F0EDE6}
+.footer-info{font-size:11px;font-family:'DM Mono',monospace;color:#4A5568;text-align:center}
+.footer-copy{font-size:11px;color:#4A5568}
+.footer-powered{max-width:1100px;margin:12px auto 0;text-align:center;font-size:10px;font-family:'DM Mono',monospace;color:#2A3A52}
+
+/* ARIA WIDGET */
+.aria-bubble{position:fixed;bottom:28px;right:28px;z-index:999;display:flex;flex-direction:column;align-items:flex-end;gap:10px}
+.aria-hint{background:var(--navy);color:var(--gold);font-size:12px;padding:7px 14px;border-radius:20px;border:1px solid rgba(201,168,76,.3);font-family:'DM Mono',monospace;animation:fadeIn 1s .5s ease both;opacity:0;animation-fill-mode:forwards;cursor:pointer}
+.aria-btn{width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));box-shadow:0 8px 28px rgba(201,168,76,.44);font-size:20px;display:flex;align-items:center;justify-content:center;transition:transform .2s;color:var(--navy)}
+.aria-btn:hover{transform:scale(1.1)}
+.aria-window{position:fixed;bottom:20px;right:20px;z-index:999;width:360px;height:510px;border-radius:16px;background:#fff;border:1px solid var(--border);box-shadow:0 24px 64px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;animation:fadeUp .3s ease;display:none}
+.aria-window.open{display:flex}
+.aria-header{padding:14px 18px;background:var(--navy);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.aria-avatar{width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,.2);border:1px solid rgba(201,168,76,.4);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gold)}
+.aria-name{font-size:13.5px;font-weight:600;color:#F0EDE6}
+.aria-status{font-size:10px;color:var(--gold);display:flex;align-items:center;gap:5px}
+.aria-online-dot{width:5px;height:5px;border-radius:50%;background:#34D058;animation:pulse 2s infinite}
+.aria-close{margin-left:auto;background:none;border:none;color:#8B95A1;font-size:20px;cursor:pointer;line-height:1;padding:2px}
+.aria-messages{flex:1;overflow-y:auto;padding:14px 16px;background:var(--bg)}
+.msg{display:flex;margin-bottom:12px;animation:chat .25s ease}
+.msg.user{justify-content:flex-end}
+.msg-bubble{max-width:84%;padding:10px 13px;font-size:13px;line-height:1.7;white-space:pre-wrap}
+.msg-bubble.assistant{border-radius:14px 14px 14px 3px;background:#fff;border:1px solid var(--border);color:var(--charcoal)}
+.msg-bubble.user{border-radius:14px 14px 3px 14px;background:var(--navy);color:#F0EDE6}
+.aria-typing{display:flex;gap:4px;padding:10px 14px;border-radius:14px 14px 14px 3px;background:#fff;border:1px solid var(--border);width:fit-content}
+.typing-dot{width:5px;height:5px;border-radius:50%;background:var(--gold)}
+.aria-suggestions{padding:8px 14px;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px}
+.suggestion-btn{padding:4px 10px;border-radius:12px;font-size:11px;cursor:pointer;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);color:var(--navy);transition:all .15s}
+.suggestion-btn:hover{background:rgba(201,168,76,.15)}
+.aria-input-row{padding:10px 12px;border-top:1px solid var(--border);display:flex;gap:8px;background:#fff;flex-shrink:0}
+.aria-input{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--charcoal);font-size:12.5px}
+.aria-send{width:36px;height:36px;border-radius:7px;border:none;cursor:pointer;font-size:15px;transition:all .15s;display:flex;align-items:center;justify-content:center}
+
+/* DASHBOARD */
+.dashboard{position:fixed;top:105px;right:20px;z-index:90;width:340px;background:#0C0E11;border:1px solid #1E2328;border-radius:14px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5);display:none;animation:fadeUp .3s ease}
+.dashboard.open{display:block}
+.dash-header{padding:12px 16px;border-bottom:1px solid #1E2328;display:flex;align-items:center;gap:8px}
+.dash-live-dot{width:6px;height:6px;border-radius:50%;background:#34D058;animation:pulse 2s infinite}
+.dash-title{font-size:10px;font-family:'DM Mono',monospace;color:var(--gold);letter-spacing:1.5px}
+.dash-subtitle{margin-left:auto;font-size:10px;font-family:'DM Mono',monospace;color:#4A5568}
+.dash-section{padding:14px 16px;border-bottom:1px solid #1E2328}
+.dash-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.dash-kpi-val{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;text-align:center}
+.dash-kpi-label{font-size:9px;color:#4A5568;text-align:center;margin-top:2px}
+.dash-section-title{font-size:9px;font-family:'DM Mono',monospace;color:#4A5568;letter-spacing:1.5px;margin-bottom:10px}
+.dash-region-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.dash-region-name{font-size:11px;color:#8B95A1;width:80px;flex-shrink:0}
+.dash-bar-track{flex:1;height:4px;background:#1E2328;border-radius:2px;overflow:hidden}
+.dash-bar-fill{height:100%;border-radius:2px}
+.dash-region-pct{font-size:10px;font-family:'DM Mono',monospace;width:28px;text-align:right}
+.dash-q-row{display:flex;gap:8px;margin-bottom:8px;align-items:flex-start}
+.dash-q-flag{font-size:13px;flex-shrink:0}
+.dash-q-text{font-size:11px;color:#8B95A1;flex:1;line-height:1.45}
+.dash-q-time{font-size:9px;color:#4A5568;font-family:'DM Mono',monospace;flex-shrink:0}
+.dash-bars{display:flex;gap:3px;align-items:flex-end;height:40px}
+.dash-bar{flex:1;border-radius:2px 2px 0 0}
+.dash-chart-labels{display:flex;justify-content:space-between;margin-top:4px}
+.dash-chart-label{font-size:9px;color:#4A5568;font-family:'DM Mono',monospace}
+
+/* MOBILE */
+@media(max-width:768px){
+  .company-inner,.contact-inner{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+  .testi-grid{grid-template-columns:1fr}
+  .company-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+  .dashboard{display:none!important}
+}
+
+/* ANIMATIONS TRIGGER */
+.animate{opacity:0;transform:translateY(16px)}
+.animate.visible{animation:fadeUp .6s ease forwards}
+</style>
+</head>
+<body>
+
+<!-- DEMO BANNER -->
+<div class="demo-banner">
+  🍍 DEMO — Built by Pineapple Bun AI for Headland Intelligence &nbsp;·&nbsp; Premium Plan $197 &nbsp;·&nbsp; Toggle Live Dashboard in nav &nbsp;·&nbsp; <a href="https://pineapplebun.ai" style="color:var(--navy);font-weight:600">pineapplebun.ai</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#home">
+    <div class="nav-logo-box"><div class="nav-logo-inner"></div></div>
+    <div>
+      <div class="nav-logo-text">Headland Intelligence</div>
+      <div class="nav-logo-sub">HONG KONG</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a class="nav-link" href="#company">The Company</a>
+    <a class="nav-link" href="#services">Services</a>
+    <a class="nav-link" href="#testimonials">Clients</a>
+    <a class="nav-link" href="#contact">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-dash" id="dashToggle" onclick="toggleDash()" style="border:1px solid rgba(201,168,76,.4);background:transparent;color:var(--gold)">
+      <span id="dashDot" style="width:6px;height:6px;border-radius:50%;background:#34D058;animation:pulse 2s infinite;flex-shrink:0"></span>
+      <span id="dashLabel">Live Dashboard</span>
+    </button>
+    <a class="btn-enquire" href="#contact">Enquire</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-ring" style="top:15%;right:6%;width:320px;height:320px;border:1px solid rgba(201,168,76,.1)"></div>
+  <div class="hero-ring" style="top:20%;right:9%;width:200px;height:200px;border:1px solid rgba(201,168,76,.18);animation:float 7s ease-in-out infinite"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span class="hero-badge-text">ESTABLISHED · HONG KONG · SINCE 2010</span>
+    </div>
+    <h1 class="hero-h1">Well-informed,<br><em class="hero-em">credible</em> and nuanced<br>intelligence.</h1>
+    <p class="hero-p">Headland Intelligence is Hong Kong's foremost business intelligence firm — providing risk consulting, due diligence, dispute resolution and investigative services to law firms, private equity and family offices across Asia and beyond.</p>
+    <div class="hero-btns">
+      <a class="btn-primary" href="#contact">Request a Consultation</a>
+      <a class="btn-outline-light" href="#services">Our Services</a>
+    </div>
+    <div class="hero-stats">
+      <div><div class="hero-stat-val">45+</div><div class="hero-stat-label">Years combined experience</div></div>
+      <div><div class="hero-stat-val">7</div><div class="hero-stat-label">Specialist services</div></div>
+      <div><div class="hero-stat-val">HK · SG · UK</div><div class="hero-stat-label">Coverage regions</div></div>
+      <div><div class="hero-stat-val">100%</div><div class="hero-stat-label">Confidential</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPANY -->
+<section class="company animate" id="company">
+  <div class="company-inner">
+    <div>
+      <div class="section-tag">THE COMPANY</div>
+      <h2 class="section-h2" style="margin-bottom:20px">Trusted intelligence.<br><em style="color:var(--gold);font-style:italic">Delivered with discretion.</em></h2>
+      <p class="company-p">Founded and led by industry veterans with backgrounds spanning investigative journalism, financial intelligence and corporate law, Headland Intelligence brings unmatched depth of expertise to every engagement.</p>
+      <p class="company-p">We serve some of the most demanding clients in Asia — law firms, private equity houses, family offices and multinational corporations — who require intelligence that is accurate, timely and actionable.</p>
+      <a href="#contact" class="btn-enquire" style="display:inline-block;margin-top:8px;text-decoration:none">Meet the Team &rarr;</a>
+    </div>
+    <div class="company-grid">
+      <div class="company-card"><div class="company-card-icon">⚖️</div><div class="company-card-title">Legal Community</div><div class="company-card-body">Trusted by leading law firms across HK, Singapore and the UK for litigation support and dispute intelligence.</div></div>
+      <div class="company-card"><div class="company-card-icon">🏦</div><div class="company-card-title">Private Equity</div><div class="company-card-body">Pre-deal due diligence and target background checks for PE firms and corporate sponsors.</div></div>
+      <div class="company-card"><div class="company-card-icon">👤</div><div class="company-card-title">Family Offices</div><div class="company-card-body">Discreet personal and corporate investigations for HNWIs and multi-family offices.</div></div>
+      <div class="company-card"><div class="company-card-icon">🌏</div><div class="company-card-title">Global Reach</div><div class="company-card-body">On-the-ground investigative capability across Asia, Europe and the Americas.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services animate" id="services">
+  <div class="services-inner">
+    <div class="section-tag">THE OFFERING</div>
+    <h2 class="section-h2">Seven specialist services.<br><em style="color:var(--gold);font-style:italic">One trusted partner.</em></h2>
+    <div class="services-grid">
+      <div id="serviceNav"></div>
+      <div id="serviceDetail"></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials animate" id="testimonials">
+  <div class="testimonials-inner">
+    <div class="section-tag">CLIENT TESTIMONIALS</div>
+    <h2 class="section-h2">Trusted across Asia<br>and beyond.</h2>
+    <div class="testi-grid">
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"Headland's pre-IPO background check was thorough, discreet and delivered ahead of schedule. They identified material issues that our internal team had missed entirely."</p><div class="testi-name">Partner</div><div class="testi-role">Magic Circle Law Firm, Hong Kong</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"The asset trace investigation was outstanding. They located assets across three jurisdictions in under two weeks — results that gave us significant leverage in settlement negotiations."</p><div class="testi-name">Managing Director</div><div class="testi-role">Private Equity Firm, Singapore</div></div>
+      <div class="testi-card"><div class="testi-stars">★★★★★</div><p class="testi-quote">"We rely on Headland for all our KYC and AML screening. Their volume reporting is fast, accurate and has never let us down. A genuinely trusted partner."</p><div class="testi-name">Chief Compliance Officer</div><div class="testi-role">Family Office, Hong Kong</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact animate" id="contact">
+  <div class="contact-inner">
+    <div>
+      <div class="section-tag">CONFIDENTIAL ENQUIRIES</div>
+      <h2 class="contact-h2">Begin a<br><em class="contact-em">confidential</em><br>conversation.</h2>
+      <p class="contact-p">All enquiries are handled with the utmost discretion. Initial consultations are complimentary and without obligation.</p>
+      <div class="contact-info-row"><span style="font-size:16px">📍</span><span class="contact-info-text">10/F, 31 Wyndham Street, Central, Hong Kong</span></div>
+      <div class="contact-info-row"><span style="font-size:16px">📞</span><span class="contact-info-text">+852 2523 3228</span></div>
+      <div class="contact-info-row"><span style="font-size:16px">✉️</span><span class="contact-info-text">Enquiries via form or Aria AI assistant</span></div>
+      <div class="contact-info-row"><span style="font-size:16px">🌐</span><span class="contact-info-text">English &middot; 繁中 &middot; 简中</span></div>
+    </div>
+    <div class="contact-form">
+      <div style="font-size:13px;font-weight:600;color:var(--navy);margin-bottom:20px">Confidential Enquiry Form</div>
+      <div id="contactForm">
+        <label class="form-label">Full Name</label>
+        <input class="form-input" type="text" id="fName" placeholder="Your name"/>
+        <label class="form-label">Company / Organisation</label>
+        <input class="form-input" type="text" placeholder="Your company"/>
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" id="fEmail" placeholder="your@email.com"/>
+        <label class="form-label">Service Required</label>
+        <select class="form-select">
+          <option value="">Select a service...</option>
+          <option>Pre-IPO Background Searches</option>
+          <option>Asset &amp; Location Trace</option>
+          <option>Disputes &amp; Investigations</option>
+          <option>Debt Recovery &amp; Negotiations</option>
+          <option>Strategic Intelligence</option>
+          <option>KYC / AML Reporting</option>
+          <option>Bespoke Report</option>
+        </select>
+        <label class="form-label">Brief Description</label>
+        <textarea class="form-textarea" rows="3" placeholder="Please describe your requirements in general terms..."></textarea>
+        <button class="btn-submit" onclick="submitForm()">Submit Enquiry</button>
+        <p class="form-note">All submissions are treated in strict confidence.</p>
+      </div>
+      <div class="form-thanks" id="formThanks">
+        <div style="font-size:40px;margin-bottom:16px">✦</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:500;color:var(--navy);margin-bottom:10px">Thank you.</h3>
+        <p style="font-size:14px;color:var(--slate);line-height:1.8">Your enquiry has been received. A member of the Headland team will be in touch discreetly within one business day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Headland Intelligence</div>
+    <div class="footer-info">10/F, 31 Wyndham Street, Central, Hong Kong &nbsp;&middot;&nbsp; +852 2523 3228</div>
+    <div class="footer-copy">&copy; 2025 Headland Intelligence</div>
+  </div>
+  <div class="footer-powered">Powered by Pineapple Bun AI 🍍 &nbsp;&middot;&nbsp; AI chat and live dashboard added by pineapplebun.ai</div>
+</footer>
+
+<!-- ARIA WIDGET -->
+<div class="aria-bubble" id="ariaBubble">
+  <div class="aria-hint" onclick="openAria()">Chat with Aria &rarr;</div>
+  <button class="aria-btn" onclick="openAria()">✦</button>
+</div>
+<div class="aria-window" id="ariaWindow">
+  <div class="aria-header">
+    <div class="aria-avatar">✦</div>
+    <div>
+      <div class="aria-name">Aria</div>
+      <div class="aria-status"><div class="aria-online-dot"></div>Headland Intelligence &middot; Online</div>
+    </div>
+    <button class="aria-close" onclick="closeAria()">×</button>
+  </div>
+  <div class="aria-messages" id="ariaMessages"></div>
+  <div class="aria-suggestions" id="ariaSuggestions">
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">What services do you offer?</button>
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">How do I request due diligence?</button>
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">Is my enquiry confidential?</button>
+    <button class="suggestion-btn" onclick="sendSuggestion(this)">Do you work outside Hong Kong?</button>
+  </div>
+  <div class="aria-input-row">
+    <input class="aria-input" id="ariaInput" placeholder="Type your enquiry..." onkeydown="if(event.key==='Enter')sendAria()"/>
+    <button class="aria-send" id="ariaSendBtn" onclick="sendAria()" style="background:var(--navy);color:#fff">↑</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+  <div class="dash-header">
+    <div class="dash-live-dot"></div>
+    <span class="dash-title">LIVE DASHBOARD</span>
+    <span class="dash-subtitle">pineapplebun.ai</span>
+  </div>
+  <div class="dash-section">
+    <div class="dash-kpis">
+      <div><div class="dash-kpi-val" style="color:var(--gold)" id="dashVisitors">847</div><div class="dash-kpi-label">Visitors (30d)</div></div>
+      <div><div class="dash-kpi-val" style="color:#34D058">23</div><div class="dash-kpi-label">Enquiries</div></div>
+      <div><div class="dash-kpi-val" style="color:#3B9EFF">2.7%</div><div class="dash-kpi-label">Conversion</div></div>
+    </div>
+  </div>
+  <div class="dash-section">
+    <div class="dash-section-title">VISITOR ORIGINS</div>
+    <div class="dash-region-row"><span class="dash-region-name">Hong Kong</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:42%;background:var(--gold)"></div></div><span class="dash-region-pct" style="color:var(--gold)">42%</span></div>
+    <div class="dash-region-row"><span class="dash-region-name">Singapore</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:24%;background:#4A90A4"></div></div><span class="dash-region-pct" style="color:#4A90A4">24%</span></div>
+    <div class="dash-region-row"><span class="dash-region-name">UK / Europe</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:18%;background:#6B7C93"></div></div><span class="dash-region-pct" style="color:#6B7C93">18%</span></div>
+    <div class="dash-region-row"><span class="dash-region-name">USA</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:10%;background:#8B95A1"></div></div><span class="dash-region-pct" style="color:#8B95A1">10%</span></div>
+    <div class="dash-region-row"><span class="dash-region-name">Other</span><div class="dash-bar-track"><div class="dash-bar-fill" style="width:6%;background:#4A5568"></div></div><span class="dash-region-pct" style="color:#4A5568">6%</span></div>
+  </div>
+  <div class="dash-section">
+    <div class="dash-section-title">ARIA — RECENT QUESTIONS</div>
+    <div class="dash-q-row"><span class="dash-q-flag">🇸🇬</span><span class="dash-q-text">Do you handle cross-border asset tracing?</span><span class="dash-q-time">2m ago</span></div>
+    <div class="dash-q-row"><span class="dash-q-flag">🇬🇧</span><span class="dash-q-text">What jurisdictions do you cover for KYC?</span><span class="dash-q-time">14m ago</span></div>
+    <div class="dash-q-row"><span class="dash-q-flag">🇭🇰</span><span class="dash-q-text">Can you assist with pre-IPO due diligence?</span><span class="dash-q-time">31m ago</span></div>
+    <div class="dash-q-row"><span class="dash-q-flag">🇺🇸</span><span class="dash-q-text">Do you offer contingency fee arrangements?</span><span class="dash-q-time">1h ago</span></div>
+  </div>
+  <div class="dash-section" style="border-bottom:none">
+    <div class="dash-section-title">WEEKLY TRAFFIC</div>
+    <div class="dash-bars" id="dashChart"></div>
+    <div class="dash-chart-labels"><span class="dash-chart-label">14 days ago</span><span class="dash-chart-label" style="color:var(--gold)">Today &#8593;36%</span></div>
+  </div>
+</div>
+
+<script>
+// ── SERVICES DATA ──────────────────────────────────────────────────────────────
+var SERVICES = [
+  { icon:"📋", title:"Pre-IPO Background Searches", short:"Pre-IPO", body:"Comprehensive overview of listing companies for IPO professional parties — validating corporate disclosures independently and impartially. Undertaken by experienced investigators with deep knowledge of HKEX listing rules and requirements." },
+  { icon:"🔍", title:"Asset & Location Trace", short:"Asset Trace", body:"Wide-ranging, creative investigations to locate individuals and assets globally. We identify vessel and aviation ownership, ascertain net worth, discover significant shareholdings and trace addresses through discreet enquiries and specialist proprietary databases." },
+  { icon:"⚖️", title:"Disputes & Investigations", short:"Disputes", body:"Specialist fact-finding and intelligence gathering to attain admissible evidence. We review and verify disclosures, discover further relevant information and undertake analysis in support of the development of legal strategy. Conflict checks are completed prior to accepting all assignments." },
+  { icon:"💼", title:"Debt Recovery & Negotiations", short:"Debt Recovery", body:"Intelligence on counterparty financial circumstances and business operations. We provide context, obtain leverage, advise on likelihood of recovery and consult on possible settlement strategies — including contingency fee negotiations undertaken on behalf of clients." },
+  { icon:"🌐", title:"Strategic Intelligence", short:"Strategic", body:"Independent, reliable intelligence helping businesses assess reputational and regulatory risks of new partners, commercial and geopolitical risks of new markets, and the viability of investments and bidding strategy in unfamiliar jurisdictions." },
+  { icon:"📊", title:"KYC & AML Reporting", short:"KYC / AML", body:"Large-volume standardised reporting including Pre-Employment Screenings, Customer and Supplier KYC checks, AML verifications and Individual and Corporate background reports. Headland staff may be seconded to assist with in-house compliance tasks where required." },
+  { icon:"📁", title:"Bespoke Reports", short:"Bespoke", body:"Short sell reports, trading risk reports, reputation searches, discreet personal inquiries and pre-deal and pre-investment due diligence — tailored precisely to client requirements. We have a global network and rely on deep local expertise across all major jurisdictions." },
+];
+var activeService = 0;
+
+function renderServices() {
+  var nav = document.getElementById('serviceNav');
+  var detail = document.getElementById('serviceDetail');
+  nav.innerHTML = SERVICES.map(function(s, i) {
+    return '<button class="service-nav-btn' + (i === activeService ? ' active' : '') + '" onclick="selectService(' + i + ')">' +
+      '<span style="font-size:16px">' + s.icon + '</span>' +
+      '<span>' + s.short + '</span>' +
+      (i === activeService ? '<span class="service-nav-arrow">&rarr;</span>' : '') +
+    '</button>';
+  }).join('');
+  var s = SERVICES[activeService];
+  detail.innerHTML = '<div class="service-detail">' +
+    '<div class="service-detail-top"></div>' +
+    '<div class="service-icon">' + s.icon + '</div>' +
+    '<h3 class="service-title">' + s.title + '</h3>' +
+    '<p class="service-body">' + s.body + '</p>' +
+    '<a href="#contact" class="btn-service-cta">Discuss this service &rarr;</a>' +
+  '</div>';
+}
+function selectService(i) { activeService = i; renderServices(); }
+renderServices();
+
+// ── NAV SCROLL ─────────────────────────────────────────────────────────────────
+window.addEventListener('scroll', function() {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// ── SCROLL ANIMATIONS ──────────────────────────────────────────────────────────
+var obs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.animate').forEach(function(el) { obs.observe(el); });
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────────
+var dashOpen = false;
+var weeklyData = [38,52,61,44,79,93,88,71,65,82,97,104,88,120];
+var visitorCount = 847;
+
+function renderChart() {
+  var max = Math.max.apply(null, weeklyData);
+  var html = weeklyData.map(function(v, i) {
+    var h = Math.round(v / max * 100);
+    var bg = i === weeklyData.length - 1 ? 'var(--gold)' : '#1E2328';
+    return '<div class="dash-bar" style="height:' + h + '%;background:' + bg + '"></div>';
+  }).join('');
+  document.getElementById('dashChart').innerHTML = html;
+}
+renderChart();
+
+setInterval(function() {
+  visitorCount += Math.floor(Math.random() * 3);
+  var el = document.getElementById('dashVisitors');
+  if (el) el.textContent = visitorCount.toLocaleString();
+}, 4000);
+
+function toggleDash() {
+  dashOpen = !dashOpen;
+  document.getElementById('dashboard').classList.toggle('open', dashOpen);
+  document.getElementById('dashLabel').textContent = dashOpen ? 'Hide Dashboard' : 'Live Dashboard';
+}
+
+// ── FORM ───────────────────────────────────────────────────────────────────────
+function submitForm() {
+  var name = document.getElementById('fName').value;
+  if (!name || !document.getElementById('fEmail').value) { alert('Please fill in your name and email.'); return; }
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('formThanks').classList.add('show');
+}
+
+// ── ARIA CHAT ──────────────────────────────────────────────────────────────────
+var ariaOpen = false;
+var ariaHistory = [];
+var ARIA_SYSTEM = "You are Aria, the AI assistant for Headland Intelligence — a prestigious Hong Kong business intelligence firm. Address enquiries professionally and discreetly.\n\nABOUT HEADLAND:\n- Location: 10/F, 31 Wyndham Street, Central, Hong Kong\n- Phone: +852 2523 3228\n- Services: Pre-IPO Background Searches, Asset & Location Trace, Disputes & Investigations, Debt Recovery & Negotiations, Strategic Intelligence, KYC & AML Reporting, Bespoke Reports\n- Clients: Law firms, PE firms, family offices, hedge funds, HNWIs\n- 45+ years combined experience\n- Bilingual: English, Traditional and Simplified Chinese\n\nSTYLE: Professional, discreet, measured. Keep replies to 2-3 sentences. Guide towards a confidential consultation. Never discuss pricing — say engagements are bespoke and invite them to discuss their needs directly.";
+
+function openAria() {
+  ariaOpen = true;
+  document.getElementById('ariaBubble').style.display = 'none';
+  document.getElementById('ariaWindow').classList.add('open');
+  if (ariaHistory.length === 0) {
+    addAriaMsg('assistant', 'Good day. I\'m Aria, Headland Intelligence\'s AI assistant.\n\nI can help you understand our services, discuss your requirements in general terms, or connect you with our team for a confidential consultation.\n\nHow may I assist you?');
+  }
+}
+function closeAria() {
+  ariaOpen = false;
+  document.getElementById('ariaWindow').classList.remove('open');
+  document.getElementById('ariaBubble').style.display = 'flex';
+}
+function addAriaMsg(role, text) {
+  ariaHistory.push({ role: role, content: text });
+  var msgs = document.getElementById('ariaMessages');
+  var div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = '<div class="msg-bubble ' + role + '">' + text.replace(/\n/g, '<br>') + '</div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  if (ariaHistory.length > 2) document.getElementById('ariaSuggestions').style.display = 'none';
+}
+function showTyping() {
+  var msgs = document.getElementById('ariaMessages');
+  var div = document.createElement('div');
+  div.className = 'msg assistant';
+  div.id = 'ariaTyping';
+  div.innerHTML = '<div class="aria-typing"><div class="typing-dot" style="animation:pulse 1s 0s infinite"></div><div class="typing-dot" style="animation:pulse 1s .2s infinite"></div><div class="typing-dot" style="animation:pulse 1s .4s infinite"></div></div>';
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping() { var t = document.getElementById('ariaTyping'); if (t) t.remove(); }
+
+async function sendAria() {
+  var input = document.getElementById('ariaInput');
+  var msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  document.getElementById('ariaSendBtn').style.background = 'var(--border)';
+  addAriaMsg('user', msg);
+  showTyping();
+  try {
+    var messages = ariaHistory.slice(0, -1).map(function(m) { return { role: m.role, content: m.content }; });
+    messages.push({ role: 'user', content: ARIA_SYSTEM + '\n\nClient says: ' + msg });
+    var res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 300, messages: messages })
+    });
+    var data = await res.json();
+    removeTyping();
+    var reply = data.content && data.content[0] ? data.content[0].text : 'I apologise for the difficulty. Please call us on +852 2523 3228.';
+    addAriaMsg('assistant', reply);
+  } catch(e) {
+    removeTyping();
+    addAriaMsg('assistant', 'I apologise for the difficulty. Please call us directly on +852 2523 3228.');
+  }
+  document.getElementById('ariaSendBtn').style.background = 'var(--navy)';
+}
+function sendSuggestion(btn) {
+  document.getElementById('ariaInput').value = btn.textContent;
+  sendAria();
+}
+document.getElementById('ariaInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') sendAria(); });
+</script>
+</body>
+</html>
